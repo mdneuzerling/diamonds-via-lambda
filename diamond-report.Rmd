@@ -1,0 +1,28 @@
+---
+title: "Diamonds"
+author: "David Neuzerling"
+date: "`r Sys.Date()`"
+output: html_document
+params:
+  colour: NULL
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(ggplot2) # includes the `diamonds` dataset
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r data-prep}
+all_diamonds <- ggplot2::diamonds
+diamonds_filtered <- all_diamonds %>% filter(color == params$colour)
+```
+
+Diamonds are pretty. The average price of a diamond is \$`r round(mean(all_diamonds$price))`. The average price of a `r params$colour` colour diamond, however, is \$`r round(mean(diamonds_filtered$price))`.
+
+```{r plot-1}
+diamonds_filtered %>% 
+  ggplot(aes(x = carat, y = price)) +
+  geom_point() +
+  ggtitle(paste(params$colour, "coloured diamonds"))
+```
